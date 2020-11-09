@@ -4,8 +4,10 @@ import com.cupshe.globallock.AnnotationAttribute;
 import com.cupshe.globallock.GlobalLock;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
 
+import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -35,9 +37,14 @@ public class AspectMethodHelper {
     }
 
     public static AnnotationAttribute getAnnotationAttribute(ProceedingJoinPoint point) {
-        GlobalLock gl = getMethodSignature(point).getMethod().getAnnotation(GlobalLock.class);
+        GlobalLock gl = AnnotationUtils.getAnnotation(getMethodOfJoinPoint(point), GlobalLock.class);
+        Assert.notNull(gl, "GlobalLock annotation cannot be null.");
         return AnnotationAttribute.of(gl.key(), gl.namespace(), gl.leaseTime(), gl.waitTime(),
                 gl.timeUnit(), gl.policy());
+    }
+
+    private static Method getMethodOfJoinPoint(ProceedingJoinPoint point) {
+        return getMethodSignature(point).getMethod();
     }
 
     private static MethodSignature getMethodSignature(ProceedingJoinPoint point) {
