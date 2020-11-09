@@ -47,8 +47,8 @@ public class KeyProcessor {
         return key.charAt(0) == ':' ? key.substring(1) : key;
     }
 
-    private static String getVariableKey(String str, String key, Map<String, Object> params) {
-        return getVariableKey(str, key, params.get(key));
+    private static String getVariableKey(String str, String key, Map<String, Object> map) {
+        return getVariableKey(str, key, map.get(key));
     }
 
     private static String getVariableKey(String str, String key, Object value) {
