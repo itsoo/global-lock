@@ -20,9 +20,9 @@ public class RedissonProperties {
 
     // ~ sentinel ~ //
 
-    private String[] sentinelAddresses;
-
     private String masterName;
+
+    private String[] sentinelAddresses;
 
     // ~  others  ~ //
 

@@ -28,8 +28,7 @@ public class KeyProcessor {
         String result = key;
         Matcher m = PATTERN.matcher(key);
         while (m.find()) {
-            String name = m.group(1);
-            result = getVariableKey(result, name, params.get(name));
+            result = getVariableKey(result, m.group(1), params);
         }
 
         return result;
@@ -46,6 +45,10 @@ public class KeyProcessor {
 
     private static String getSampleKey(String key) {
         return key.charAt(0) == ':' ? key.substring(1) : key;
+    }
+
+    private static String getVariableKey(String str, String key, Map<String, Object> params) {
+        return getVariableKey(str, key, params.get(key));
     }
 
     private static String getVariableKey(String str, String key, Object value) {
