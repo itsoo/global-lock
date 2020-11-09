@@ -53,7 +53,7 @@ public @interface GlobalLock {
     TimeUnit timeUnit() default TimeUnit.MILLISECONDS;
 
     /**
-     * 超时策略
+     * 上锁策略
      * <ul>
      *   <li>{@link LockedPolicy#TRY_WAIT} (default)</li>
      *   <li>{@link LockedPolicy#BLOCKING}</li>
