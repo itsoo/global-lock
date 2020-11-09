@@ -58,7 +58,7 @@ public class GlobalLockAspect {
         String result = KeyProcessor.getLockKey(attr.namespace, attr.key, params);
         KeyProcessor.checkKeyValidity(result);
         if (log.isDebugEnabled()) {
-            log.debug("The key of the global-lock is: [" + result + ']');
+            log.debug("The key of the global-lock is: [{}]", result);
         }
 
         return result;
