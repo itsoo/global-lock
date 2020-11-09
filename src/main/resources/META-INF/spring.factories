@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.cupshe.globallock.config.RedissonConfig,\
+  com.cupshe.globallock.GlobalLockAspect

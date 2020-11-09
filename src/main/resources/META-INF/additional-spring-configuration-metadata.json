@@ -1,0 +1,79 @@
+{
+  "groups": [
+    {
+      "name": "redisson",
+      "type": "com.cupshe.globallock.config.RedissonProperties",
+      "sourceType": "com.cupshe.globallock.config.RedissonProperties",
+      "description": "Global lock config."
+    }
+  ],
+  "properties": [
+    {
+      "name": "redisson.address",
+      "type": "java.lang.String",
+      "sourceType": "com.cupshe.globallock.config.RedissonProperties",
+      "description": "Redis server address."
+    },
+    {
+      "name": "redisson.connection-minimum-idle-size",
+      "type": "java.lang.Integer",
+      "sourceType": "com.cupshe.globallock.config.RedissonProperties",
+      "defaultValue": 10,
+      "description": "Redis connection minimum idle size."
+    },
+    {
+      "name": "redisson.connection-pool-size",
+      "type": "java.lang.Integer",
+      "sourceType": "com.cupshe.globallock.config.RedissonProperties",
+      "defaultValue": 64,
+      "description": "Redis connection pool size."
+    },
+    {
+      "name": "redisson.database",
+      "type": "java.lang.Integer",
+      "sourceType": "com.cupshe.globallock.config.RedissonProperties",
+      "defaultValue": 0,
+      "description": "Redis database."
+    },
+    {
+      "name": "redisson.master-connection-pool-size",
+      "type": "java.lang.Integer",
+      "sourceType": "com.cupshe.globallock.config.RedissonProperties",
+      "defaultValue": 250,
+      "description": "Redis connection pool size."
+    },
+    {
+      "name": "redisson.master-name",
+      "type": "java.lang.String",
+      "sourceType": "com.cupshe.globallock.config.RedissonProperties",
+      "description": "Redis master name."
+    },
+    {
+      "name": "redisson.password",
+      "type": "java.lang.String",
+      "sourceType": "com.cupshe.globallock.config.RedissonProperties",
+      "description": "Redis password."
+    },
+    {
+      "name": "redisson.sentinel-addresses",
+      "type": "java.lang.String[]",
+      "sourceType": "com.cupshe.globallock.config.RedissonProperties",
+      "description": "Redis sentinel addresses."
+    },
+    {
+      "name": "redisson.slave-connection-pool-size",
+      "type": "java.lang.Integer",
+      "sourceType": "com.cupshe.globallock.config.RedissonProperties",
+      "defaultValue": 250,
+      "description": "Redis slave connection pool size."
+    },
+    {
+      "name": "redisson.timeout",
+      "type": "java.lang.Integer",
+      "sourceType": "com.cupshe.globallock.config.RedissonProperties",
+      "defaultValue": 3000,
+      "description": "Redis timeout (milliseconds)."
+    }
+  ],
+  "hints": []
+}

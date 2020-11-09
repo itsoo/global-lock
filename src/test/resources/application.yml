@@ -1,0 +1,11 @@
+redisson:
+  # 单机模式
+  address: "redis://redis.develop.kapeixi.cn:6379"
+  password: "Y9iwbKwTrdFKavGc"
+#  # 哨兵模式
+#  master-name: demo
+#  sentinel-addresses: 127.0.0.1:26379,127.0.0.1:26380,127.0.0.1:26381
+
+logging:
+  level:
+    com.cupshe: debug
