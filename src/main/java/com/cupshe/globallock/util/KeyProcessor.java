@@ -20,11 +20,11 @@ public class KeyProcessor {
 
     private static final Pattern PATTERN = Pattern.compile("#\\{\\s*[$_A-Za-z][\\w$]+|\\b[$_A-Za-z][\\w$]+\\.");
 
-    private static final String TPL_EXP_PREFIX = "#{";
-
     private static final ExpressionParser PARSER = new SpelExpressionParser();
 
     private static final ParserContext PARSER_CONTEXT = ParserContext.TEMPLATE_EXPRESSION;
+
+    private static final String EXPRESSION_PREFIX = PARSER_CONTEXT.getExpressionPrefix();
 
     public static String getLockKey(String namespace, String key, Map<String, Object> params) {
         return processStandardLockKey(namespace, getLockKey(key, params));
@@ -66,13 +66,13 @@ public class KeyProcessor {
     }
 
     private static int processSubLockKeyAndGetLength(StringBuilder sbr, String group) {
-        boolean isRoots = group.startsWith(TPL_EXP_PREFIX);
+        boolean isRoots = group.startsWith(EXPRESSION_PREFIX);
         return isRoots ? processTplExpSubLockKey(sbr, group) : processSimpleSubLockKey(sbr, group);
     }
 
     private static int processTplExpSubLockKey(StringBuilder sbr, String group) {
-        sbr.append(TPL_EXP_PREFIX);
-        processSimpleSubLockKey(sbr, group.substring(TPL_EXP_PREFIX.length()));
+        sbr.append(EXPRESSION_PREFIX);
+        processSimpleSubLockKey(sbr, group.substring(EXPRESSION_PREFIX.length()));
         return group.length();
     }
 
