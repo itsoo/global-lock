@@ -27,7 +27,7 @@ public class KeyProcessor {
     private static final String EXPRESSION_PREFIX = PARSER_CONTEXT.getExpressionPrefix();
 
     public static String getLockKey(String namespace, String key, Map<String, Object> params) {
-        return processStandardLockKey(namespace, getLockKey(key, params));
+        return getStandardLockKey(namespace, getLockKey(key, params));
     }
 
     public static String getLockKey(String key, Map<String, Object> params) {
@@ -53,7 +53,7 @@ public class KeyProcessor {
         return result.append(key.substring(i)).toString();
     }
 
-    private static String processStandardLockKey(String ns, String k) {
+    private static String getStandardLockKey(String ns, String k) {
         return getSampleNamespace(ns) + getSampleKey(k);
     }
 
