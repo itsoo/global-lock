@@ -15,25 +15,25 @@ import java.util.concurrent.TimeUnit;
 public class TestComponent {
 
     @SneakyThrows
-    @GlobalLock(namespace = "SYSTEM:MODULE:LOCK", key = "${id}:${port}", leaseTime = 1000L)
+    @GlobalLock(namespace = "SYSTEM:MODULE:LOCK", key = "#{id}:#{port}", leaseTime = 1000L)
     public boolean tryWaitWithTimeout(Long id, String port, List<String> names) {
         return execute(id, port, names);
     }
 
     @SneakyThrows
-    @GlobalLock(namespace = "SYSTEM:MODULE:LOCK", key = "${id}:${port}", leaseTime = -1L)
+    @GlobalLock(namespace = "SYSTEM:MODULE:LOCK", key = "#{id}:#{port}", leaseTime = -1L)
     public boolean tryWaitCompletion(Long id, String port, List<String> names) {
         return execute(id, port, names);
     }
 
     @SneakyThrows
-    @GlobalLock(namespace = "SYSTEM:MODULE:LOCK", key = "${id}:${port}", leaseTime = 1000L,
+    @GlobalLock(namespace = "SYSTEM:MODULE:LOCK", key = "#{id}:#{port}", leaseTime = 1000L,
             policy = LockedPolicy.BLOCKING)
     public boolean blockingWithTimeout(Long id, String port, List<String> names) {
         return execute(id, port, names);
     }
 
-    @GlobalLock(namespace = "SYSTEM:MODULE:LOCK", key = "${id}:${port}", leaseTime = -1L,
+    @GlobalLock(namespace = "SYSTEM:MODULE:LOCK", key = "#{ id }:#{ port + ':' + names.get(0) }", leaseTime = -1L,
             policy = LockedPolicy.BLOCKING)
     public boolean blockingCompletion(Long id, String port, List<String> names) {
         return execute(id, port, names);

@@ -31,6 +31,7 @@ public class AspectMethodHelper {
         Assert.isTrue(params.length == args.length, "The params does not match the values.");
         Map<String, Object> result = new LinkedHashMap<>();
         for (int i = 0; i < params.length; i++) {
+            Assert.isNull(result.get(params[i]), "Method parameters defined repeatedly.");
             result.put(params[i], args[i]);
         }
 

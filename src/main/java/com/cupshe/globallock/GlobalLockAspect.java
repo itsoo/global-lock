@@ -57,7 +57,6 @@ public class GlobalLockAspect {
     private String getRedisLockKey(ProceedingJoinPoint point, AnnotationAttribute attr) {
         Map<String, Object> params = AspectMethodHelper.getMappingOfParameters(point);
         String result = KeyProcessor.getLockKey(attr.namespace, attr.key, params);
-        KeyProcessor.checkKeyValidity(result);
         if (log.isDebugEnabled()) {
             log.debug("The key of the global-lock is: [{}]", result);
         }

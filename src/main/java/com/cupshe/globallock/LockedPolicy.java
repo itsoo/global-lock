@@ -20,7 +20,7 @@ public enum LockedPolicy {
         public boolean tryOrLock(RLock lock, long waitTime, long leaseTime, TimeUnit timeUnit) {
             checkLeaseTimeValidity(leaseTime);
             try {
-                if (leaseTime == MIN_TIMEOUT) {
+                if (leaseTime == NON_TIMEOUT) {
                     return lock.tryLock(waitTime, timeUnit);
                 }
 
@@ -38,7 +38,7 @@ public enum LockedPolicy {
         @Override
         public boolean tryOrLock(RLock lock, long waitTime, long leaseTime, TimeUnit timeUnit) {
             checkLeaseTimeValidity(leaseTime);
-            if (leaseTime == MIN_TIMEOUT) {
+            if (leaseTime == NON_TIMEOUT) {
                 lock.lock();
             } else {
                 lock.lock(leaseTime, timeUnit);
@@ -51,9 +51,9 @@ public enum LockedPolicy {
     abstract boolean tryOrLock(RLock lock, long waitTime, long leaseTime, TimeUnit timeUnit);
 
     /*** timeout */
-    private static final long MIN_TIMEOUT = -1L;
+    private static final long NON_TIMEOUT = -1L;
 
     private static void checkLeaseTimeValidity(long leaseTime) {
-        Assert.isTrue(leaseTime >= MIN_TIMEOUT, "Valid range of 'leaseTime' [-1, Long.MAX_VALUE].");
+        Assert.isTrue(leaseTime >= NON_TIMEOUT, "Valid range of 'leaseTime' [-1, Long.MAX_VALUE].");
     }
 }
