@@ -17,7 +17,7 @@ public @interface GlobalLock {
 
     /**
      * Redis Key 作为全局锁
-     * <p>支持对 ${} 变量的解析（需从方法入参提供），若不匹配将抛出异常 {@link KeyExpressionException}
+     * <p>支持对 #{} 变量的解析（需从方法入参提供），若不匹配将抛出异常 {@link KeyExpressionException}
      *
      * @return String
      */
