@@ -3,6 +3,7 @@ package com.cupshe.globallock.util;
 import com.cupshe.globallock.AnnotationAttribute;
 import com.cupshe.globallock.GlobalLock;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
@@ -48,6 +49,8 @@ public class AspectMethodHelper {
     }
 
     private static MethodSignature getMethodSignature(ProceedingJoinPoint point) {
-        return (MethodSignature) point.getSignature();
+        Signature result = point.getSignature();
+        Assert.isTrue(result instanceof MethodSignature, "GlobalLock annotation can only be marked on methods.");
+        return (MethodSignature) result;
     }
 }
