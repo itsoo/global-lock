@@ -33,7 +33,7 @@ public class TestComponent {
         return execute(id, port, names);
     }
 
-    @GlobalLock(namespace = "SYSTEM:MODULE:LOCK", key = "#{id}:#{port+':'+names.get(0)}", leaseTime = -1L,
+    @GlobalLock(namespace = "SYSTEM:MODULE:LOCK", key = "#{id}:#{port + ':' + names.get(0)}", leaseTime = -1L,
             policy = LockedPolicy.BLOCKING)
     public boolean blockingCompletion(Long id, String port, List<String> names) {
         return execute(id, port, names);
