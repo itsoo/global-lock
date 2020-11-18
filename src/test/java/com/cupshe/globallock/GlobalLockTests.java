@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -21,9 +22,9 @@ public class GlobalLockTests {
     @Test
     public void tryWaitWithTimeout() throws InterruptedException {
         List<String> list = Collections.singletonList("ZhangSan");
+        ExecutorService es = Executors.newFixedThreadPool(THREAD_COUNT);
         for (int i = 0; i < THREAD_COUNT; i++) {
-            Executors.newFixedThreadPool(THREAD_COUNT)
-                    .execute(() -> ExecuteTemplate.doExecute(testComponent::tryWaitWithTimeout, 9L, "1521", list));
+            es.execute(() -> ExecuteTemplate.doExecute(testComponent::tryWaitWithTimeout, 9L, "1521", list));
         }
 
         TimeUnit.SECONDS.sleep(MAX_WAIT);
@@ -32,9 +33,9 @@ public class GlobalLockTests {
     @Test
     public void tryWaitCompletion() throws InterruptedException {
         List<String> list = Collections.singletonList("ZhangSan");
+        ExecutorService es = Executors.newFixedThreadPool(THREAD_COUNT);
         for (int i = 0; i < THREAD_COUNT; i++) {
-            Executors.newFixedThreadPool(THREAD_COUNT)
-                    .execute(() -> ExecuteTemplate.doExecute(testComponent::tryWaitCompletion, 9L, "1521", list));
+            es.execute(() -> ExecuteTemplate.doExecute(testComponent::tryWaitCompletion, 9L, "1521", list));
         }
 
         TimeUnit.SECONDS.sleep(MAX_WAIT);
@@ -43,9 +44,9 @@ public class GlobalLockTests {
     @Test
     public void blockingWithTimeout() throws InterruptedException {
         List<String> list = Collections.singletonList("ZhangSan");
+        ExecutorService es = Executors.newFixedThreadPool(THREAD_COUNT);
         for (int i = 0; i < THREAD_COUNT; i++) {
-            Executors.newFixedThreadPool(THREAD_COUNT)
-                    .execute(() -> ExecuteTemplate.doExecute(testComponent::blockingWithTimeout, 1L, "3306", list));
+            es.execute(() -> ExecuteTemplate.doExecute(testComponent::blockingWithTimeout, 1L, "3306", list));
         }
 
         TimeUnit.SECONDS.sleep(MAX_WAIT);
@@ -54,9 +55,9 @@ public class GlobalLockTests {
     @Test
     public void blockingCompletion() throws InterruptedException {
         List<String> list = Collections.singletonList("ZhangSan");
+        ExecutorService es = Executors.newFixedThreadPool(THREAD_COUNT);
         for (int i = 0; i < THREAD_COUNT; i++) {
-            Executors.newFixedThreadPool(THREAD_COUNT)
-                    .execute(() -> ExecuteTemplate.doExecute(testComponent::blockingCompletion, 1L, "3306", list));
+            es.execute(() -> ExecuteTemplate.doExecute(testComponent::blockingCompletion, 1L, "3306", list));
         }
 
         TimeUnit.SECONDS.sleep(MAX_WAIT);
