@@ -32,10 +32,7 @@ public class KeyProcessor {
 
     public static String getLockKey(String key, Map<String, Object> params) {
         String parseKey = getLockKey(key);
-        if (log.isDebugEnabled()) {
-            log.debug("Source lock key: [{}] ===> Parsed lock key: [{}]", key, parseKey);
-        }
-
+        log.info("Source lock key: [{}] ===> Parsed lock key: [{}]", key, parseKey);
         StandardEvaluationContext context = new StandardEvaluationContext();
         context.setVariables(params);
         return PARSER.parseExpression(parseKey, PARSER_CONTEXT).getValue(context, String.class);

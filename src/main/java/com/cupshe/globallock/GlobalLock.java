@@ -32,14 +32,14 @@ public @interface GlobalLock {
     String namespace() default "";
 
     /**
-     * 持有锁的时间（以 {@link TimeUnit} 单位为准，-1L 为不超时）
+     * 持有锁的时间（以 {@link #timeUnit} 单位为准，-1L 为不超时）
      *
      * @return long
      */
     long leaseTime();
 
     /**
-     * 获取锁的超时时间（以 {@link TimeUnit} 单位为准）
+     * 获取锁的超时时间（以 {@link #timeUnit} 单位为准）
      *
      * @return long
      */
