@@ -74,8 +74,8 @@ public class KeyProcessor {
     }
 
     private static int processSimpleSubLockKey(StringBuilder sbr, String group) {
-        int i = 0, len = group.length();
-        for (char c; i < len; i++) {
+        int i = 0, length = group.length();
+        for (char c; i < length; i++) {
             c = group.charAt(i);
             if (!Character.isWhitespace(c)) {
                 break;
@@ -85,6 +85,6 @@ public class KeyProcessor {
         }
 
         sbr.append('#').append(group.substring(i));
-        return group.length();
+        return length;
     }
 }
