@@ -5,6 +5,7 @@ import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.ParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import org.springframework.util.Assert;
 
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -18,7 +19,7 @@ import java.util.regex.Pattern;
 @Slf4j
 public class KeyProcessor {
 
-    private static final Pattern PATTERN = Pattern.compile("#\\{\\s*[$_A-Za-z][\\w$]+|\\b[$_A-Za-z][\\w$]+\\.");
+    private static final Pattern VARIABLE_RULES = Pattern.compile("(?i)(?:\"[^\"]*\"|'[^']*')|[^#.\\[\\w\\s]\\s*\\b[a-z_$][\\w$]*\\b");
 
     private static final ExpressionParser PARSER = new SpelExpressionParser();
 
@@ -26,58 +27,78 @@ public class KeyProcessor {
 
     private static final String EXPRESSION_PREFIX = PARSER_CONTEXT.getExpressionPrefix();
 
+    private static final String EXPRESSION_SUFFIX = PARSER_CONTEXT.getExpressionSuffix();
+
     public static String getLockKey(String namespace, String key, Map<String, Object> params) {
         return getStandardLockKey(namespace, getLockKey(key, params));
     }
 
     public static String getLockKey(String key, Map<String, Object> params) {
-        String parseKey = getLockKey(key);
-        log.info("Source lock key: [{}] ===> Parsed lock key: [{}]", key, parseKey);
+        String parsedKey = getLockKey(key);
+        log.info("Source lock key: [{}] ===> Parsed lock key: [{}]", key, parsedKey);
         StandardEvaluationContext context = new StandardEvaluationContext();
         context.setVariables(params);
-        return PARSER.parseExpression(parseKey, PARSER_CONTEXT).getValue(context, String.class);
+        return PARSER.parseExpression(parsedKey, PARSER_CONTEXT).getValue(context, String.class);
     }
 
     private static String getLockKey(String key) {
         StringBuilder result = new StringBuilder();
-        Matcher m = PATTERN.matcher(key);
+        int i = 0, j = i;
+        while ((i = key.indexOf(EXPRESSION_PREFIX, i)) != -1) {
+            result.append(key, j, i); // no expression template string
+            j = key.indexOf(EXPRESSION_SUFFIX, i);
+            Assert.isTrue(j != -1, "Expression format error.");
+            result.append(getSubLockKey(key.substring(i, j)));
+            i = j;
+        }
+
+        return result.append(key.substring(j)).toString();
+    }
+
+    private static String getSubLockKey(String key) {
+        StringBuilder result = new StringBuilder();
+        Matcher m = VARIABLE_RULES.matcher(key);
         int i = 0;
         while (m.find()) {
             result.append(key, i, i = m.start());
-            i += processSubLockKeyAndGetLength(result, m.group());
+            i += getSubLockKeyAndGetLength(result, m.group());
         }
 
         return result.append(key.substring(i)).toString();
     }
 
-    private static String getStandardLockKey(String ns, String k) {
-        return getSampleNamespace(ns) + getSampleKey(k);
+    private static String getStandardLockKey(String namespace, String key) {
+        return getSampleNamespace(namespace) + getSampleKey(key);
     }
 
-    private static String getSampleNamespace(String ns) {
-        return "".equals(ns) || ":".equals(ns) ? "" : (ns.endsWith(":") ? ns : ns + ':');
+    private static String getSampleNamespace(String namespace) {
+        return "".equals(namespace) || ":".equals(namespace)
+                ? ""
+                : (namespace.endsWith(":") ? namespace : namespace + ':');
     }
 
-    private static String getSampleKey(String k) {
-        return k.charAt(0) == ':' ? k.substring(1) : k;
+    private static String getSampleKey(String key) {
+        return key.charAt(0) == ':' ? key.substring(1) : key;
     }
 
-    private static int processSubLockKeyAndGetLength(StringBuilder sbr, String group) {
-        boolean isRoots = group.startsWith(EXPRESSION_PREFIX);
-        return isRoots ? processTplExpSubLockKey(sbr, group) : processSimpleSubLockKey(sbr, group);
+    private static int getSubLockKeyAndGetLength(StringBuilder sbr, String group) {
+        return getExpressionSubLockKey(sbr, group);
     }
 
-    private static int processTplExpSubLockKey(StringBuilder sbr, String group) {
-        sbr.append(EXPRESSION_PREFIX);
-        processSimpleSubLockKey(sbr, group.substring(EXPRESSION_PREFIX.length()));
-        return group.length();
+    private static int getExpressionSubLockKey(StringBuilder sbr, String group) {
+        if (group.startsWith("\"") || group.startsWith("'")) {
+            sbr.append(group);
+            return group.length();
+        }
+
+        return getExpressionSubVarLockKey(sbr, group);
     }
 
-    private static int processSimpleSubLockKey(StringBuilder sbr, String group) {
+    private static int getExpressionSubVarLockKey(StringBuilder sbr, String group) {
         int i = 0, length = group.length();
         for (char c; i < length; i++) {
             c = group.charAt(i);
-            if (!Character.isWhitespace(c)) {
+            if (Character.isLetter(c)) {
                 break;
             }
 
