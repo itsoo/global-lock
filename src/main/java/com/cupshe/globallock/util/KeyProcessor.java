@@ -25,9 +25,9 @@ public class KeyProcessor {
 
     private static final ParserContext PARSER_CONTEXT = ParserContext.TEMPLATE_EXPRESSION;
 
-    private static final String EXPRESSION_PREFIX = PARSER_CONTEXT.getExpressionPrefix();
+    private static final String EXPRESSION_DELIMITER_PREFIX = PARSER_CONTEXT.getExpressionPrefix();
 
-    private static final String EXPRESSION_SUFFIX = PARSER_CONTEXT.getExpressionSuffix();
+    private static final String EXPRESSION_DELIMITER_SUFFIX = PARSER_CONTEXT.getExpressionSuffix();
 
     public static String getLockKey(String namespace, String key, Map<String, Object> params) {
         return getStandardLockKey(namespace, getLockKey(key, params));
@@ -44,9 +44,9 @@ public class KeyProcessor {
     private static String getLockKey(String key) {
         StringBuilder result = new StringBuilder();
         int i = 0, j = i;
-        while ((i = key.indexOf(EXPRESSION_PREFIX, i)) != -1) {
-            result.append(key, j, i); // no expression template string
-            j = key.indexOf(EXPRESSION_SUFFIX, i);
+        while ((i = key.indexOf(EXPRESSION_DELIMITER_PREFIX, i)) != -1) {
+            result.append(key, j, i); // no expression template delimiter
+            j = key.indexOf(EXPRESSION_DELIMITER_SUFFIX, i);
             Assert.isTrue(j != -1, "Expression format error.");
             result.append(getSubLockKey(key.substring(i, j)));
             i = j;

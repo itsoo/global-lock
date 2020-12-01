@@ -14,19 +14,16 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class TestComponent {
 
-    @SneakyThrows
     @GlobalLock(namespace = "SYSTEM:MODULE:LOCK", key = "#{id}:#{port}", leaseTime = 1000L)
     public boolean tryWaitWithTimeout(Long id, String port, List<String> names) {
         return execute(id, port, names);
     }
 
-    @SneakyThrows
     @GlobalLock(namespace = "SYSTEM:MODULE:LOCK", key = "#{id}:#{port}", leaseTime = -1L)
     public boolean tryWaitCompletion(Long id, String port, List<String> names) {
         return execute(id, port, names);
     }
 
-    @SneakyThrows
     @GlobalLock(namespace = "SYSTEM:MODULE:LOCK", key = "#{id}:#{port}", leaseTime = 1000L,
             policy = LockedPolicy.BLOCKING)
     public boolean blockingWithTimeout(Long id, String port, List<String> names) {
