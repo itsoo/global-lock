@@ -1,5 +1,6 @@
 package com.cupshe.globallock;
 
+import com.cupshe.globallock.config.RedissonConfig;
 import com.cupshe.globallock.exception.TryLockTimeoutException;
 import com.cupshe.globallock.util.AspectMethodHelper;
 import com.cupshe.globallock.util.KeyProcessor;
@@ -10,7 +11,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 
 import java.util.Map;
@@ -22,8 +23,8 @@ import java.util.Map;
  */
 @Slf4j
 @Aspect
-@AutoConfigureOrder(LoadOrder.LOWER)
 @ConditionalOnBean(RedissonClient.class)
+@AutoConfigureAfter(RedissonConfig.class)
 public class GlobalLockAspect {
 
     private final RedissonClient redissonClient;
@@ -56,11 +57,7 @@ public class GlobalLockAspect {
     private String getRedisLockKey(ProceedingJoinPoint point, AnnotationAttribute attr) {
         Map<String, Object> params = AspectMethodHelper.getMappingOfParameters(point);
         String result = KeyProcessor.getLockKey(attr.namespace, attr.key, params);
-        KeyProcessor.checkKeyValidity(result);
-        if (log.isDebugEnabled()) {
-            log.debug("The key of the global-lock is: [{}]", result);
-        }
-
+        log.info("The key of the global-lock is: [{}]", result);
         return result;
     }
 }

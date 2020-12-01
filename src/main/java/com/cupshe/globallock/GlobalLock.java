@@ -17,7 +17,7 @@ public @interface GlobalLock {
 
     /**
      * Redis Key 作为全局锁
-     * <p>支持对 ${} 变量的解析（需从方法入参提供），若不匹配将抛出异常 {@link KeyExpressionException}
+     * <p>支持对 #{} 变量的解析（需从方法入参提供），若不匹配将抛出异常 {@link KeyExpressionException}
      *
      * @return String
      */
@@ -32,14 +32,14 @@ public @interface GlobalLock {
     String namespace() default "";
 
     /**
-     * 持有锁的时间（以 {@link TimeUnit} 单位为准，-1L 为不超时）
+     * 持有锁的时间（以 {@link #timeUnit} 单位为准，-1L 为不超时）
      *
      * @return long
      */
     long leaseTime();
 
     /**
-     * 获取锁的超时时间（以 {@link TimeUnit} 单位为准）
+     * 获取锁的超时时间（以 {@link #timeUnit} 单位为准）
      *
      * @return long
      */
