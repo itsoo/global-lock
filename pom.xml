@@ -11,7 +11,7 @@
     </parent>
     <groupId>com.cupshe</groupId>
     <artifactId>global-lock-spring-boot-starter</artifactId>
-    <version>0.1.1-RELEASE</version>
+    <version>0.2.0-SNAPSHOT</version>
 
     <properties>
         <java.version>1.8</java.version>
@@ -74,8 +74,8 @@
 
     <distributionManagement>
         <repository>
-            <id>cupshe-releases</id>
-            <name>releases</name>
+            <id>nexus-release</id>
+            <name>nexus prod repository</name>
             <url>http://nexus.kapeixi.cn/repository/cupshe-releases/</url>
         </repository>
         <snapshotRepository>

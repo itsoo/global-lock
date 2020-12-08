@@ -45,8 +45,6 @@ public class GlobalLockAspect {
             }
 
             throw new TryLockTimeoutException();
-        } catch (Exception e) {
-            throw new TryLockTimeoutException(e);
         } finally {
             if (locked && lock.isHeldByCurrentThread()) {
                 lock.unlock();

@@ -8,7 +8,7 @@
 <dependency>
   <groupId>com.cupshe</groupId>
   <artifactId>global-lock-spring-boot-starter</artifactId>
-  <version>0.1.0-RELEASE</version>
+  <version>0.2.0-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -80,7 +80,7 @@ policy        上锁策略：LockedPolicy#TRY_WAIT (default)、LockedPolicy#BLOC
 
 ### 测试场景
 
-1. 尝试获取锁，持有锁时间有超时限制
-2. 尝试获取锁，持有锁时间无超时限制
-3. 阻塞获取锁，持有锁时间有超时限制
-4. 阻塞获取锁，持有锁时间无超时限制
+1. 尝试获取锁，持有锁时间**有**超时限制
+2. 尝试获取锁，持有锁时间**无**超时限制
+3. 阻塞获取锁，持有锁时间**有**超时限制
+4. 阻塞获取锁，持有锁时间**无**超时限制

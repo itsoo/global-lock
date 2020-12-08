@@ -12,8 +12,4 @@ public class TryLockTimeoutException extends RuntimeException {
     public TryLockTimeoutException() {
         super(MESSAGE);
     }
-
-    public TryLockTimeoutException(Exception e) {
-        super(e);
-    }
 }
