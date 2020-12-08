@@ -53,7 +53,7 @@ class BeggarsLexicalAnalyzer {
                     sbr.append(c);
                 }
 
-                // Number separation and decimals are not handled
+                // number separation and decimals are not handled
                 result.add(new Kv(SimpleFiniteState.DIGIT, sbr.toString()));
                 i--;
             } else if (c == '.') {
