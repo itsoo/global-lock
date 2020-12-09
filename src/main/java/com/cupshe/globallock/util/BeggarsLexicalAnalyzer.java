@@ -1,12 +1,5 @@
 package com.cupshe.globallock.util;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 /**
  * BeggarsLexicalAnalyzer
  * <p>It is only used for analysis variables, not handling keywords, complex character types.
@@ -15,12 +8,12 @@ import java.util.List;
  */
 class BeggarsLexicalAnalyzer {
 
-    static List<Kv> resultList(String key) {
+    static Kvs getResult(String key) {
         if (key == null) {
-            return Collections.emptyList();
+            return Kvs.EMPTY;
         }
 
-        List<Kv> result = new ArrayList<>();
+        Kvs result = new Kvs();
         char c;
 
         for (int i = 0, length = key.length(); i < length; i++) {
@@ -106,17 +99,17 @@ class BeggarsLexicalAnalyzer {
         return i;
     }
 
+    /**
+     * SimpleFiniteState
+     */
     enum SimpleFiniteState {
         VARIABLE, // variable  e.g. name
         VARCHAR,  // varchar   e.g. 'name' or "name"
         DIGIT,    // numbers   e.g. 10
-        OTHER     // others    e.g. empty/clause/delimiter/operator...
-    }
+        OTHER;    // others    e.g. empty/clause/delimiter/operator...
 
-    @Data
-    @AllArgsConstructor
-    static final class Kv {
-        final SimpleFiniteState state;
-        final String value;
+        boolean isVariable() {
+            return VARIABLE.equals(this);
+        }
     }
 }
