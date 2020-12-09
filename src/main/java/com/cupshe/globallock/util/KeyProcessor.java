@@ -82,8 +82,8 @@ public class KeyProcessor {
 
     private static String getExpressionVarLockKey(String key) {
         StringBuilder result = new StringBuilder(key.length() + 8);
-        for (BeggarsLexicalAnalyzer.Kv kv : BeggarsLexicalAnalyzer.resultList(key)) {
-            if (BeggarsLexicalAnalyzer.SimpleFiniteState.VARIABLE.equals(kv.state)) {
+        for (Kv kv : BeggarsLexicalAnalyzer.getResult(key)) {
+            if (kv.state.isVariable()) {
                 result.append('#');
             }
 
