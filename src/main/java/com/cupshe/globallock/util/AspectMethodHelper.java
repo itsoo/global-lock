@@ -41,8 +41,14 @@ public class AspectMethodHelper {
     public static AnnotationAttribute getAnnotationAttribute(ProceedingJoinPoint point) {
         GlobalLock gl = AnnotationUtils.getAnnotation(getMethodOfJoinPoint(point), GlobalLock.class);
         Assert.notNull(gl, "GlobalLock annotation cannot be null.");
-        return AnnotationAttribute.of(gl.key(), gl.namespace(), gl.leaseTime(), gl.waitTime(),
-                gl.timeUnit(), gl.policy());
+        return AnnotationAttribute.annotationAttributeBuilder()
+                .setKey(gl.key())
+                .setNamespace(gl.namespace())
+                .setLeaseTime(gl.leaseTime())
+                .setWaitTime(gl.waitTime())
+                .setTimeUnit(gl.timeUnit())
+                .setPolicy(gl.policy())
+                .build();
     }
 
     private static Method getMethodOfJoinPoint(ProceedingJoinPoint point) {
