@@ -18,7 +18,7 @@ public @interface GlobalLock {
 
     /**
      * Redis Key 作为全局锁
-     * <p>支持对 #{} 变量的解析（需从方法入参提供），若不匹配将抛出异常 {@link KeyExpressionException}
+     * <p>支持对 #{} 变量的解析（需从方法入参提供），可能抛出 {@link KeyExpressionException}
      *
      * @return String
      */
@@ -60,7 +60,7 @@ public @interface GlobalLock {
      *   <li>{@link LockedPolicy#BLOCKING}</li>
      * </ul>
      *
-     * <p>maybe throw {@link TryLockTimeoutException} as {@link LockedPolicy#TRY_WAIT}
+     * <p>可能抛出 {@link TryLockTimeoutException} 当策略为 {@link LockedPolicy#TRY_WAIT}
      *
      * @return {@link LockedPolicy}
      */
