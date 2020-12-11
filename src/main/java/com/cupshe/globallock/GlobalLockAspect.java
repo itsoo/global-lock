@@ -13,6 +13,7 @@ import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.lang.NonNull;
 
 import java.util.Map;
 
@@ -34,7 +35,7 @@ public class GlobalLockAspect {
     }
 
     @Around("@annotation(com.cupshe.globallock.GlobalLock)")
-    public Object around(ProceedingJoinPoint point) throws Throwable {
+    public Object around(@NonNull ProceedingJoinPoint point) throws Throwable {
         AnnotationAttribute attr = AspectMethodHelper.getAnnotationAttribute(point);
         RLock lock = redissonClient.getLock(getRedisLockKey(point, attr));
         boolean locked = attr.policy.tryOrLock(lock, attr.waitTime, attr.leaseTime, attr.timeUnit);

@@ -3,6 +3,7 @@ package com.cupshe.globallock.util;
 import org.junit.Test;
 
 import static com.cupshe.globallock.util.BeggarsLexicalAnalyzer.SimpleFiniteState;
+import static com.cupshe.globallock.util.Kvs.Kv;
 
 /**
  * KvsTests

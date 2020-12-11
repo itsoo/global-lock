@@ -5,10 +5,11 @@ import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.ParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
-import org.springframework.util.Assert;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.cupshe.globallock.util.Kvs.Kv;
 
 /**
  * KeyProcessor
@@ -24,9 +25,9 @@ public class KeyProcessor {
 
     private static final ParserContext PARSER_CONTEXT = ParserContext.TEMPLATE_EXPRESSION;
 
-    private static final String EXPRESSION_DELIMITER_PREFIX = PARSER_CONTEXT.getExpressionPrefix();
+    public static final String EXPRESSION_DELIMITER_PREFIX = PARSER_CONTEXT.getExpressionPrefix();
 
-    private static final String EXPRESSION_DELIMITER_SUFFIX = PARSER_CONTEXT.getExpressionSuffix();
+    public static final String EXPRESSION_DELIMITER_SUFFIX = PARSER_CONTEXT.getExpressionSuffix();
 
     public static String getLockKey(String namespace, String key, Map<String, Object> params) {
         return getStandardLockKey(namespace, getLockKey(key, params));
@@ -46,7 +47,6 @@ public class KeyProcessor {
         while ((i = key.indexOf(EXPRESSION_DELIMITER_PREFIX, i)) != -1) {
             result.append(key, j, i); // no expression template delimiter
             j = key.indexOf(EXPRESSION_DELIMITER_SUFFIX, i);
-            Assert.isTrue(j != -1, "Expression format error.");
             result.append(getExpressionLockKey(key.substring(i, j)));
             i = j;
         }

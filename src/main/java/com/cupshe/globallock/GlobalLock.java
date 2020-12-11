@@ -1,6 +1,7 @@
 package com.cupshe.globallock;
 
 import com.cupshe.globallock.exception.KeyExpressionException;
+import com.cupshe.globallock.exception.TryLockTimeoutException;
 
 import java.lang.annotation.*;
 import java.util.concurrent.TimeUnit;
@@ -58,6 +59,8 @@ public @interface GlobalLock {
      *   <li>{@link LockedPolicy#TRY_WAIT} (default)</li>
      *   <li>{@link LockedPolicy#BLOCKING}</li>
      * </ul>
+     *
+     * <p>maybe throw {@link TryLockTimeoutException} as {@link LockedPolicy#TRY_WAIT}
      *
      * @return {@link LockedPolicy}
      */

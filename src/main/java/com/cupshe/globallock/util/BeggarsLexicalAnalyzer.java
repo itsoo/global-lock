@@ -1,5 +1,7 @@
 package com.cupshe.globallock.util;
 
+import static com.cupshe.globallock.util.Kvs.Kv;
+
 /**
  * BeggarsLexicalAnalyzer
  * <p>It is only used for analysis variables, not handling keywords, complex character types.
@@ -10,7 +12,7 @@ class BeggarsLexicalAnalyzer {
 
     static Kvs getResult(String key) {
         if (key == null) {
-            return Kvs.EMPTY;
+            return Kvs.emptyKvs();
         }
 
         Kvs result = new Kvs();
@@ -103,10 +105,10 @@ class BeggarsLexicalAnalyzer {
      * SimpleFiniteState
      */
     enum SimpleFiniteState {
-        VARIABLE, // variable  e.g. name
-        VARCHAR,  // varchar   e.g. 'name' or "name"
-        DIGIT,    // numbers   e.g. 10
-        OTHER;    // others    e.g. empty/clause/delimiter/operator...
+        VARIABLE, // variable  e.g. - name
+        VARCHAR,  // varchar   e.g. - 'name' or "name"
+        DIGIT,    // numbers   e.g. - 10
+        OTHER;    // others    e.g. - empty/clause/delimiter/operator and...
 
         boolean isVariable() {
             return VARIABLE.equals(this);
