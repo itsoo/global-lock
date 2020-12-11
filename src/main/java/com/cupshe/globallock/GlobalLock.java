@@ -25,7 +25,7 @@ public @interface GlobalLock {
     String key();
 
     /**
-     * 命名空间，即组成 key 的前缀部分如：{@code GLOBAL:LOCK:}
+     * 命名空间，即组成 key 的前缀部分例如：{@code GLOBAL:LOCK:}
      * <p>用于和 key 共同组成完整的 redis key，不支持变量解析
      *
      * @return String
