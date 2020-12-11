@@ -35,7 +35,8 @@ public class AssertAnnotationAttribute implements BeanPostProcessor {
             GlobalLock ann = AnnotationUtils.getAnnotation(method, GlobalLock.class);
             if (ann != null) {
                 assertTrue(Modifier.isPublic(method.getModifiers()), method, "access modifier must be public.");
-                assertTrue(ann.leaseTime() >= NON_TIMEOUT, method, "'leaseTime' must ranged [-1, Long.MAX_VALUE].");
+                assertTrue(ann.leaseTime() >= NON_TIMEOUT, method,
+                        "'leaseTime' must ranged [" + NON_TIMEOUT + ", Long.MAX_VALUE].");
                 assertKeyExpressionFormat(ann.key(), method);
             }
         }
