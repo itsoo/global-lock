@@ -5,6 +5,7 @@ import org.springframework.lang.NonNull;
 import java.util.Iterator;
 
 import static com.cupshe.globallock.util.BeggarsLexicalAnalyzer.SimpleFiniteState;
+import static com.cupshe.globallock.util.Kvs.Kv;
 
 /**
  * Kvs
@@ -13,14 +14,18 @@ import static com.cupshe.globallock.util.BeggarsLexicalAnalyzer.SimpleFiniteStat
  */
 class Kvs implements Iterable<Kv> {
 
-    static final Kvs EMPTY = new Kvs();
-
     private final Kv head;
     private Kv curr;
+
+    private static final Kvs EMPTY = new Kvs();
 
     Kvs() {
         head = Kv.EMPTY;
         curr = head;
+    }
+
+    static Kvs emptyKvs() {
+        return EMPTY;
     }
 
     void add(Kv kv) {
@@ -34,6 +39,9 @@ class Kvs implements Iterable<Kv> {
         return new Itr();
     }
 
+    /**
+     * Iterator
+     */
     final class Itr implements Iterator<Kv> {
         private Kv _curr;
 
@@ -51,39 +59,34 @@ class Kvs implements Iterable<Kv> {
             return _curr = _curr.next;
         }
     }
-}
 
-/**
- * Kv
- * <p>state is {@code SimpleFiniteState.class}
- * <p>value is {@code String.class}
- *
- * @author zxy
- */
-final class Kv {
+    /**
+     * SimpleFiniteState -> String
+     */
+    static final class Kv {
+        final SimpleFiniteState state;
+        final String value;
 
-    static final Kv EMPTY = new Kv();
+        private static final Kv EMPTY = new Kv();
 
-    Kv next;
+        Kv next;
 
-    final SimpleFiniteState state;
-    final String value;
+        private Kv() {
+            this.state = null;
+            this.value = null;
+        }
 
-    private Kv() {
-        this.state = null;
-        this.value = null;
-    }
+        Kv(SimpleFiniteState state, String value) {
+            this.state = state;
+            this.value = value;
+        }
 
-    Kv(SimpleFiniteState state, String value) {
-        this.state = state;
-        this.value = value;
-    }
-
-    @Override
-    public String toString() {
-        return "Kv(" +
-                "state=" + state +
-                ", value=" + value +
-                ')';
+        @Override
+        public String toString() {
+            return "Kv(" +
+                    "state=" + state +
+                    ", value=" + value +
+                    ')';
+        }
     }
 }

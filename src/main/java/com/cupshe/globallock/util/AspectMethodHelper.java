@@ -31,7 +31,6 @@ public class AspectMethodHelper {
         Assert.isTrue(params.length == args.length, "The params does not match the values.");
         Map<String, Object> result = new LinkedHashMap<>();
         for (int i = 0; i < params.length; i++) {
-            Assert.isNull(result.get(params[i]), "Method parameters defined repeatedly.");
             result.put(params[i], args[i]);
         }
 
@@ -40,7 +39,7 @@ public class AspectMethodHelper {
 
     public static AnnotationAttribute getAnnotationAttribute(ProceedingJoinPoint point) {
         GlobalLock gl = AnnotationUtils.getAnnotation(getMethodOfJoinPoint(point), GlobalLock.class);
-        Assert.notNull(gl, "GlobalLock annotation cannot be null.");
+        Assert.notNull(gl, "@GlobalLock annotation cannot be null.");
         return AnnotationAttribute.annotationAttributeBuilder()
                 .setKey(gl.key())
                 .setNamespace(gl.namespace())
@@ -57,7 +56,7 @@ public class AspectMethodHelper {
 
     private static MethodSignature getMethodSignature(ProceedingJoinPoint point) {
         Signature result = point.getSignature();
-        Assert.isTrue(result instanceof MethodSignature, "GlobalLock annotation can only be marked on methods.");
+        Assert.isTrue(result instanceof MethodSignature, "@GlobalLock annotation can only be marked on methods.");
         return (MethodSignature) result;
     }
 }
