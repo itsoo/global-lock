@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author zxy
  */
-@Target({ElementType.PARAMETER, ElementType.METHOD})
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface GlobalLock {
