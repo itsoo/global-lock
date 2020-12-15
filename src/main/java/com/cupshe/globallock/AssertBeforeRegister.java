@@ -18,11 +18,11 @@ import static com.cupshe.globallock.util.KeyProcessor.EXPRESSION_DELIMITER_PREFI
 import static com.cupshe.globallock.util.KeyProcessor.EXPRESSION_DELIMITER_SUFFIX;
 
 /**
- * AssertAnnotationAttribute
+ * AssertBeforeRegister
  *
  * @author zxy
  */
-public class AssertAnnotationAttribute implements BeanPostProcessor {
+public class AssertBeforeRegister implements BeanPostProcessor {
 
     @Override
     @SneakyThrows
