@@ -39,6 +39,19 @@ class Kvs implements Iterable<Kv> {
         return new Itr();
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sbr = new StringBuilder();
+        String sp = ", ";
+        for (Kv kv : this) {
+            sbr.append(kv.toString()).append(sp);
+        }
+
+        int len = sbr.length(), sLen = sp.length();
+        sbr.setLength(len > sLen ? len - sLen : len);
+        return "Kvs[" + sbr.toString() + ']';
+    }
+
     /**
      * Iterator
      */

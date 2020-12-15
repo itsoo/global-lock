@@ -1,4 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.cupshe.globallock.config.RedissonConfig,\
   com.cupshe.globallock.GlobalLockAspect,\
-  com.cupshe.globallock.AssertAnnotationAttribute
+  com.cupshe.globallock.AssertBeforeRegister
