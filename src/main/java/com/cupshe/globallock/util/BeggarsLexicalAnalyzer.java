@@ -16,10 +16,8 @@ class BeggarsLexicalAnalyzer {
         }
 
         Kvs result = new Kvs();
-        char c;
-
         for (int i = 0, length = key.length(); i < length; i++) {
-            c = key.charAt(i);
+            char c = key.charAt(i);
             if (isLetter(c)) {
                 StringBuilder sbr = new StringBuilder(1 << 2).append(c);
                 while (++i < length && isLetterOrDigit(c = key.charAt(i))) {
