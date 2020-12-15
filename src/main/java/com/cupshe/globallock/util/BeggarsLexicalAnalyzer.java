@@ -28,16 +28,16 @@ class BeggarsLexicalAnalyzer {
 
                 result.add(new Kv(SimpleFiniteState.VARIABLE, sbr.toString()));
                 i--;
-            } else if (c == '\'') {
+            } else if (c == '\'' && !isEscapeBefore(key, i)) {
                 StringBuilder sbr = new StringBuilder(1 << 2).append(c);
-                while (++i < length && (c = key.charAt(i)) != '\'') {
+                while (++i < length && ((c = key.charAt(i)) != '\'' || isEscapeBefore(key, i))) {
                     sbr.append(c);
                 }
 
                 result.add(new Kv(SimpleFiniteState.VARCHAR, sbr.append(c).toString()));
-            } else if (c == '"') {
+            } else if (c == '"' && !isEscapeBefore(key, i)) {
                 StringBuilder sbr = new StringBuilder(1 << 2).append(c);
-                while (++i < length && (c = key.charAt(i)) != '"') {
+                while (++i < length && ((c = key.charAt(i)) != '"' || isEscapeBefore(key, i))) {
                     sbr.append(c);
                 }
 
@@ -92,6 +92,10 @@ class BeggarsLexicalAnalyzer {
         return isLetter(c) || Character.isDigit(c);
     }
 
+    private static boolean isEscapeBefore(String key, int i) {
+        return i > 0 && key.charAt(i - 1) == '\\';
+    }
+
     private static int append(int i, int length, String key, StringBuilder sbr, char sp) {
         char c;
         while (++i < length && (c = key.charAt(i)) != sp) {
@@ -105,10 +109,10 @@ class BeggarsLexicalAnalyzer {
      * SimpleFiniteState
      */
     enum SimpleFiniteState {
-        VARIABLE, // variable  e.g. - name
-        VARCHAR,  // varchar   e.g. - 'name' or "name"
-        DIGIT,    // numbers   e.g. - 10
-        OTHER;    // others    e.g. - empty/clause/delimiter/operator and...
+        VARIABLE, // variable  eg: name
+        VARCHAR,  // varchar   eg: 'name' or "name"
+        DIGIT,    // numbers   eg: 10
+        OTHER;    // others    eg: empty/clause/delimiter/operator and...
 
         boolean isVariable() {
             return VARIABLE.equals(this);
