@@ -36,7 +36,7 @@ public class AssertBeforeRegister implements BeanPostProcessor {
             if (ann != null) {
                 assertTrue(Modifier.isPublic(method.getModifiers()), method, "access modifier must be public.");
                 assertTrue(ann.leaseTime() >= NON_TIMEOUT, method, "'leaseTime' must ranged [-1, Long.MAX_VALUE].");
-                assertKeyExpressionFormat(ann.key(), method);
+                assertKeyFormats(ann.key(), method);
             }
         }
 
@@ -54,7 +54,7 @@ public class AssertBeforeRegister implements BeanPostProcessor {
         Assert.isTrue(expr, "The [" + method.toGenericString() + "] " + message);
     }
 
-    private void assertKeyExpressionFormat(String key, Method method) {
+    private void assertKeyFormats(String key, Method method) {
         int i = StringUtils.countOccurrencesOf(key, EXPRESSION_DELIMITER_PREFIX);
         int j = StringUtils.countOccurrencesOf(key, EXPRESSION_DELIMITER_SUFFIX);
         assertTrue(i == j, method, "'key' format error, please check '" +
