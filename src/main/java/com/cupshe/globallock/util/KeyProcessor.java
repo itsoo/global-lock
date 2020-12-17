@@ -6,8 +6,8 @@ import org.springframework.expression.ParserContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.cupshe.globallock.util.Kvs.Kv;
 
@@ -19,7 +19,7 @@ import static com.cupshe.globallock.util.Kvs.Kv;
 @Slf4j
 public class KeyProcessor {
 
-    private static final Map<String, String> KEYS_CACHE = new HashMap<>();
+    private static final Map<String, String> KEYS_CACHE = new ConcurrentHashMap<>(32);
 
     private static final ExpressionParser PARSER = new SpelExpressionParser();
 
@@ -69,15 +69,7 @@ public class KeyProcessor {
     }
 
     private static String getExpressionLockKey(String key) {
-        if (!KEYS_CACHE.containsKey(key)) {
-            synchronized (KEYS_CACHE) {
-                if (!KEYS_CACHE.containsKey(key)) {
-                    KEYS_CACHE.put(key, getExpressionVarLockKey(key));
-                }
-            }
-        }
-
-        return KEYS_CACHE.get(key);
+        return KEYS_CACHE.computeIfAbsent(key, KeyProcessor::getExpressionVarLockKey);
     }
 
     private static String getExpressionVarLockKey(String key) {
