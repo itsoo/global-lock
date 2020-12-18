@@ -3,6 +3,7 @@ package com.cupshe.globallock.util;
 import org.springframework.lang.NonNull;
 
 import java.util.Iterator;
+import java.util.StringJoiner;
 
 import static com.cupshe.globallock.util.BeggarsLexicalAnalyzer.SimpleFiniteState;
 import static com.cupshe.globallock.util.Kvs.Kv;
@@ -41,15 +42,12 @@ class Kvs implements Iterable<Kv> {
 
     @Override
     public String toString() {
-        StringBuilder sbr = new StringBuilder();
-        String sp = ", ";
+        StringJoiner joiner = new StringJoiner(", ");
         for (Kv kv : this) {
-            sbr.append(kv.toString()).append(sp);
+            joiner.add(kv.toString());
         }
 
-        int len = sbr.length(), sLen = sp.length();
-        sbr.setLength(len > sLen ? len - sLen : len);
-        return "Kvs[" + sbr.toString() + ']';
+        return "Kvs[" + joiner.toString() + ']';
     }
 
     /**

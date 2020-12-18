@@ -42,11 +42,10 @@ class BeggarsLexicalAnalyzer {
                 result.add(new Kv(SimpleFiniteState.VARCHAR, sbr.append(c).toString()));
             } else if (Character.isDigit(c)) {
                 StringBuilder sbr = new StringBuilder(1 << 2).append(c);
-                while (++i < length && Character.isDigit(c = key.charAt(i))) {
+                while (++i < length && isCanonicalDigit(c = key.charAt(i), key, i)) {
                     sbr.append(c);
                 }
 
-                // number separation and decimals are not handled
                 result.add(new Kv(SimpleFiniteState.DIGIT, sbr.toString()));
                 i--;
             } else if (c == '.') {
@@ -88,6 +87,10 @@ class BeggarsLexicalAnalyzer {
 
     private static boolean isLetterOrDigit(char c) {
         return isLetter(c) || Character.isDigit(c);
+    }
+
+    private static boolean isCanonicalDigit(char c, String key, int i) {
+        return Character.isDigit(c) || (('_' == c || '.' == c) && Character.isDigit(key.charAt(++i)));
     }
 
     private static boolean isEscapeBefore(String key, int i) {
