@@ -51,7 +51,7 @@ public class AssertBeforeRegister implements BeanPostProcessor {
     }
 
     private void assertTrue(boolean expr, Method method, String message) {
-        Assert.isTrue(expr, "The [" + method.toGenericString() + "] " + message);
+        Assert.isTrue(expr, method.toGenericString() + ": " + message);
     }
 
     private void assertKeyFormats(String key, Method method) {

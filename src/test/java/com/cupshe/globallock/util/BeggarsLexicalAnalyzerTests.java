@@ -19,10 +19,10 @@ public class BeggarsLexicalAnalyzerTests {
 
         System.out.println("===============================");
 
-        System.out.println(BeggarsLexicalAnalyzer.getResult("port + '\\':abc\\'\"\"' + names.get(0) + 'ABC'"));
+        System.out.println(BeggarsLexicalAnalyzer.getResult("port + '\\':abc\\'\"\"' + names.get(0.0) + 'ABC'"));
 
         System.out.println("===============================");
 
-        System.out.println(BeggarsLexicalAnalyzer.getResult("port'\\':abc\\'\"\"' + names.get(0)'ABC'"));
+        System.out.println(BeggarsLexicalAnalyzer.getResult("port'\\':abc\\'\"\"' + names.get(100_000.00)'ABC'"));
     }
 }
