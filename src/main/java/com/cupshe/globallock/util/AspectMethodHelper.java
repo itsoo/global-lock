@@ -3,7 +3,6 @@ package com.cupshe.globallock.util;
 import com.cupshe.globallock.AnnotationAttribute;
 import com.cupshe.globallock.GlobalLock;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.Signature;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.Assert;
@@ -19,27 +18,24 @@ import java.util.Map;
  */
 public class AspectMethodHelper {
 
-    public static String[] getMethodParameterNames(ProceedingJoinPoint point) {
-        return getMethodSignature(point).getParameterNames();
-    }
-
     public static Map<String, Object> getMappingOfParameters(ProceedingJoinPoint point) {
         return getMappingOfParameters(getMethodParameterNames(point), point.getArgs());
     }
 
-    public static Map<String, Object> getMappingOfParameters(String[] params, Object[] args) {
-        Assert.isTrue(params.length == args.length, "The params does not match the values.");
+    public static Map<String, Object> getMappingOfParameters(String[] keys, Object[] values) {
+        Assert.isTrue(keys.length == values.length, "The parameters does not match the values.");
         Map<String, Object> result = new LinkedHashMap<>();
-        for (int i = 0; i < params.length; i++) {
-            result.put(params[i], args[i]);
+        for (int i = 0; i < keys.length; i++) {
+            result.put(keys[i], values[i]);
         }
 
         return result;
     }
 
     public static AnnotationAttribute getAnnotationAttribute(ProceedingJoinPoint point) {
-        GlobalLock ann = AnnotationUtils.getAnnotation(getMethodOfJoinPoint(point), GlobalLock.class);
-        Assert.notNull(ann, "@GlobalLock annotation cannot be null.");
+        Method method = getMethod(point);
+        GlobalLock ann = AnnotationUtils.getAnnotation(method, GlobalLock.class);
+        Assert.notNull(ann, method.toGenericString() + ": cannot found annotation @GlobalLock.");
         return AnnotationAttribute.annotationAttributeBuilder()
                 .setKey(ann.key())
                 .setNamespace(ann.namespace())
@@ -50,13 +46,15 @@ public class AspectMethodHelper {
                 .build();
     }
 
-    private static Method getMethodOfJoinPoint(ProceedingJoinPoint point) {
+    private static String[] getMethodParameterNames(ProceedingJoinPoint point) {
+        return getMethodSignature(point).getParameterNames();
+    }
+
+    private static Method getMethod(ProceedingJoinPoint point) {
         return getMethodSignature(point).getMethod();
     }
 
     private static MethodSignature getMethodSignature(ProceedingJoinPoint point) {
-        Signature result = point.getSignature();
-        Assert.isTrue(result instanceof MethodSignature, "@GlobalLock annotation can only be marked on methods.");
-        return (MethodSignature) result;
+        return (MethodSignature) point.getSignature();
     }
 }

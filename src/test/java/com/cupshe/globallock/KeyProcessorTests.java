@@ -29,6 +29,9 @@ public class KeyProcessorTests {
         // 验证表达式中出现关键字的场景
         Map<String, Object> arg4 = new HashMap<>();
         arg4.put("if", 1);
-        System.out.println(KeyProcessor.getLockKey("#{  if  }", arg4));
+        arg4.put("new", 1);
+        arg4.put("void", 1);
+        arg4.put("while", 1);
+        System.out.println(KeyProcessor.getLockKey("#{  if + ':' + new + ':' + void + ':' + while  }", arg4));
     }
 }
