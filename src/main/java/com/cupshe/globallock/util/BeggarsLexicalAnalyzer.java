@@ -61,7 +61,6 @@ class BeggarsLexicalAnalyzer {
                 while (++i < length && Character.isWhitespace(c = key.charAt(i))) {
                     sbr.append(c);
                 }
-
                 if (Character.isDigit(c)) {
                     result.add(new Kv(SimpleFiniteState.OTHER, sbr.toString()));
                     i--;
