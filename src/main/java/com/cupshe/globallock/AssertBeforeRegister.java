@@ -45,7 +45,7 @@ public class AssertBeforeRegister implements BeanPostProcessor {
 
     private boolean isIgnoredBean(String beanName, Object bean) {
         return beanName.startsWith("org.springframework")
-                || beanName.contains("&")
+                || beanName.startsWith("&")
                 || bean instanceof BeanFactory
                 || bean instanceof FactoryBean;
     }
@@ -55,9 +55,9 @@ public class AssertBeforeRegister implements BeanPostProcessor {
     }
 
     private void assertKeyFormats(String key, Method method) {
-        int i = StringUtils.countOccurrencesOf(key, EXPRESSION_DELIMITER_PREFIX);
-        int j = StringUtils.countOccurrencesOf(key, EXPRESSION_DELIMITER_SUFFIX);
-        assertTrue(i == j, method, "'key' format error, please check '" +
+        int prefixCount = StringUtils.countOccurrencesOf(key, EXPRESSION_DELIMITER_PREFIX);
+        int suffixCount = StringUtils.countOccurrencesOf(key, EXPRESSION_DELIMITER_SUFFIX);
+        assertTrue(prefixCount == suffixCount, method, "'key' format error, please check '" +
                 EXPRESSION_DELIMITER_PREFIX + "' or '" +
                 EXPRESSION_DELIMITER_SUFFIX + "'.");
     }

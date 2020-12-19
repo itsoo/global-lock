@@ -42,7 +42,15 @@ class BeggarsLexicalAnalyzer {
                 result.add(new Kv(SimpleFiniteState.VARCHAR, sbr.append(c).toString()));
             } else if (Character.isDigit(c)) {
                 StringBuilder sbr = new StringBuilder(1 << 2).append(c);
+                short dotCount = 0;
                 while (++i < length && isCanonicalDigit(c = key.charAt(i), key, i)) {
+                    if (c == '.') {
+                        dotCount++;
+                    }
+                    if (dotCount > 1) {
+                        break;
+                    }
+
                     sbr.append(c);
                 }
 
@@ -52,6 +60,12 @@ class BeggarsLexicalAnalyzer {
                 StringBuilder sbr = new StringBuilder(1 << 2).append(c);
                 while (++i < length && Character.isWhitespace(c = key.charAt(i))) {
                     sbr.append(c);
+                }
+
+                if (Character.isDigit(c)) {
+                    result.add(new Kv(SimpleFiniteState.OTHER, sbr.toString()));
+                    i--;
+                    continue;
                 }
 
                 sbr.append(c);
@@ -110,10 +124,10 @@ class BeggarsLexicalAnalyzer {
      * SimpleFiniteState
      */
     enum SimpleFiniteState {
-        VARIABLE, // variable  eg: name
-        VARCHAR,  // varchar   eg: 'name' or "name"
-        DIGIT,    // numbers   eg: 10
-        OTHER;    // others    eg: empty/clause/delimiter/operator and...
+        VARIABLE, // variable  e.g.: foo
+        VARCHAR,  // varchar   e.g.: 'foo' or "foo"
+        DIGIT,    // numbers   e.g.: 1 or 1.0 or 1_000 or 1_000.000000
+        OTHER;    // others    e.g.: empty/clause/delimiter/operator and...
 
         boolean isVariable() {
             return VARIABLE.equals(this);

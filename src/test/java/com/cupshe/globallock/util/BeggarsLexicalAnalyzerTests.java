@@ -2,6 +2,8 @@ package com.cupshe.globallock.util;
 
 import org.junit.Test;
 
+import static com.cupshe.globallock.util.Kvs.Kv;
+
 /**
  * BeggarsLexicalAnalyzerTests
  *
@@ -11,18 +13,28 @@ public class BeggarsLexicalAnalyzerTests {
 
     @Test
     public void test() {
-        System.out.println(BeggarsLexicalAnalyzer.getResult(""));
+        System.out.println(getKvs(""));
 
         System.out.println("===============================");
 
-        System.out.println(BeggarsLexicalAnalyzer.getResult("port\\''abc\\'\\''names"));
+        for (Kv kv : getKvs("port\\''abc\\'\\''names")) {
+            System.out.println(kv);
+        }
 
         System.out.println("===============================");
 
-        System.out.println(BeggarsLexicalAnalyzer.getResult("port + '\\':abc\\'\"\"' + names.get(0.0) + 'ABC'"));
+        for (Kv kv : getKvs("port + '\\':abc\\'\"\"' + names[0.0.0] + 'ABC'.len2()")) {
+            System.out.println(kv);
+        }
 
         System.out.println("===============================");
 
-        System.out.println(BeggarsLexicalAnalyzer.getResult("port'\\':abc\\'\"\"' + names.get(100_000.00)'ABC'"));
+        for (Kv kv : getKvs("port'\\':abc\\'\"\"' + 100_000.00.value() + names.get(0)'ABC'")) {
+            System.out.println(kv);
+        }
+    }
+
+    private Kvs getKvs(String key) {
+        return BeggarsLexicalAnalyzer.getResult(key);
     }
 }
