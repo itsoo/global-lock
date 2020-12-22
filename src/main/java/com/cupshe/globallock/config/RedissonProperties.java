@@ -12,19 +12,25 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("redisson")
 public class RedissonProperties {
 
-    // ~  single  ~ //
+    //---------------------
+    // SINGLE
+    //---------------------
 
     private String address;
 
     private String password;
 
-    // ~ sentinel ~ //
+    //---------------------
+    // SENTINEL
+    //---------------------
 
     private String masterName;
 
     private String[] sentinelAddresses;
 
-    // ~  others  ~ //
+    //---------------------
+    // OTHERS
+    //---------------------
 
     private int database = 0;
 
