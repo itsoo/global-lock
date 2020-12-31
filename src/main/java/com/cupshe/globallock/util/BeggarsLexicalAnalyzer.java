@@ -123,10 +123,10 @@ class BeggarsLexicalAnalyzer {
      * SimpleFiniteState
      */
     enum SimpleFiniteState {
-        VARIABLE, // variable  e.g. foo
-        VARCHAR,  // varchar   e.g. 'foo' or "foo"
-        DIGIT,    // numbers   e.g. 1 or 1.0 or 1_000 or 1_000.000000
-        OTHER;    // others    e.g. empty/clause/delimiter/operator and...
+        VARIABLE, // variable  e.g.: foo
+        VARCHAR,  // varchar   e.g.: 'foo' or "foo"
+        DIGIT,    // numbers   e.g.: 1 or 1.0 or 1_000 or 1_000.000000
+        OTHER;    // others    e.g.: empty/clause/delimiter/operator and...
 
         boolean isVariable() {
             return VARIABLE.equals(this);

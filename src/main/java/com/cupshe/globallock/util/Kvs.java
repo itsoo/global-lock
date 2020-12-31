@@ -21,7 +21,7 @@ class Kvs implements Iterable<Kv> {
     private static final Kvs EMPTY = new Kvs();
 
     Kvs() {
-        head = Kv.EMPTY;
+        head = new Kv();
         curr = head;
     }
 
@@ -54,6 +54,7 @@ class Kvs implements Iterable<Kv> {
      * Iterator
      */
     final class Itr implements Iterator<Kv> {
+
         private Kv _curr;
 
         Itr() {
@@ -75,16 +76,14 @@ class Kvs implements Iterable<Kv> {
      * SimpleFiniteState -> String
      */
     static final class Kv {
+
         final SimpleFiniteState state;
         final String value;
-
-        private static final Kv EMPTY = new Kv();
 
         Kv next;
 
         private Kv() {
-            this.state = null;
-            this.value = null;
+            this(null, null);
         }
 
         Kv(SimpleFiniteState state, String value) {
