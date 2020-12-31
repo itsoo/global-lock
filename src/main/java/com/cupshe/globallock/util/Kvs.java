@@ -54,6 +54,7 @@ class Kvs implements Iterable<Kv> {
      * Iterator
      */
     final class Itr implements Iterator<Kv> {
+
         private Kv _curr;
 
         Itr() {
