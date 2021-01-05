@@ -42,6 +42,7 @@ public class AnnotationAttribute {
     @Setter
     @Accessors(chain = true)
     public static class AnnotationAttributeBuilder {
+
         private String key;
         private String namespace;
         private long leaseTime;
