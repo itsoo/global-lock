@@ -92,8 +92,8 @@ class BeggarsLexicalAnalyzer {
                     }
                 }
 
-                i--;
                 result.add(new Kv(OTHER, sbr.toString()));
+                i--;
             } else if (c == '(' || c == '[' || c == '{') {
                 StringBuilder sbr = new StringBuilder(1 << 3).append(c);
                 if (c == '(') {
@@ -112,8 +112,8 @@ class BeggarsLexicalAnalyzer {
                         sbr.append(c);
                     }
 
-                    i--;
                     result.add(new Kv(OTHER, sbr.toString()));
+                    i--;
                 } else {
                     result.add(new Kv(OTHER, String.valueOf(c)));
                 }
