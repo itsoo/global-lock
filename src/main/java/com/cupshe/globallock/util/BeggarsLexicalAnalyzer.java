@@ -1,5 +1,6 @@
 package com.cupshe.globallock.util;
 
+import static com.cupshe.globallock.util.BeggarsLexicalAnalyzer.SimpleFiniteState.*;
 import static com.cupshe.globallock.util.Kvs.Kv;
 
 /**
@@ -28,34 +29,38 @@ class BeggarsLexicalAnalyzer {
                     sbr.append(c);
                 }
 
-                result.add(new Kv(SimpleFiniteState.VARIABLE, sbr.toString()));
+                result.add(new Kv(VARIABLE, sbr.toString()));
                 i--;
             } else if (isEscapeBefore(key, i)) {
-                result.add(new Kv(SimpleFiniteState.VARCHAR, String.valueOf('\\') + c));
+                result.add(new Kv(VARCHAR, String.valueOf('\\') + c));
             } else if (c == '\'') {
                 StringBuilder sbr = new StringBuilder(1 << 3).append(c);
-                while (++i < length && ((c = key.charAt(i)) != '\'' || isEscapeBefore(key, i))) {
+                while (++i < length && (
+                        (c = key.charAt(i)) != '\'' || isEscapeBefore(key, i))) {
+
                     sbr.append(c);
                 }
                 if (i < length) {
                     sbr.append(c);
                 }
 
-                result.add(new Kv(SimpleFiniteState.VARCHAR, sbr.toString()));
+                result.add(new Kv(VARCHAR, sbr.toString()));
             } else if (c == '"') {
                 StringBuilder sbr = new StringBuilder(1 << 3).append(c);
-                while (++i < length && ((c = key.charAt(i)) != '"' || isEscapeBefore(key, i))) {
+                while (++i < length && (
+                        (c = key.charAt(i)) != '"' || isEscapeBefore(key, i))) {
+
                     sbr.append(c);
                 }
                 if (i < length) {
                     sbr.append(c);
                 }
 
-                result.add(new Kv(SimpleFiniteState.VARCHAR, sbr.toString()));
+                result.add(new Kv(VARCHAR, sbr.toString()));
             } else if (Character.isDigit(c)) {
                 StringBuilder sbr = new StringBuilder(1 << 3).append(c);
                 short dotCount = 0;
-                while (++i < length && isCanonicalDigit(c = key.charAt(i), key, i)) {
+                while (++i < length && isFullDigit(c = key.charAt(i), key, i)) {
                     if (c == '.') {
                         dotCount++;
                     }
@@ -66,7 +71,7 @@ class BeggarsLexicalAnalyzer {
                     sbr.append(c);
                 }
 
-                result.add(new Kv(SimpleFiniteState.DIGIT, sbr.toString()));
+                result.add(new Kv(DIGIT, sbr.toString()));
                 i--;
             } else if (c == '.') {
                 StringBuilder sbr = new StringBuilder(1 << 3).append(c);
@@ -74,7 +79,7 @@ class BeggarsLexicalAnalyzer {
                     sbr.append(c);
                 }
                 if (Character.isDigit(c)) {
-                    result.add(new Kv(SimpleFiniteState.OTHER, sbr.toString()));
+                    result.add(new Kv(OTHER, sbr.toString()));
                     i--;
                     continue;
                 }
@@ -88,7 +93,7 @@ class BeggarsLexicalAnalyzer {
                 }
 
                 i--;
-                result.add(new Kv(SimpleFiniteState.OTHER, sbr.toString()));
+                result.add(new Kv(OTHER, sbr.toString()));
             } else if (c == '(' || c == '[' || c == '{') {
                 StringBuilder sbr = new StringBuilder(1 << 3).append(c);
                 if (c == '(') {
@@ -99,7 +104,7 @@ class BeggarsLexicalAnalyzer {
                     i = append(i, length, key, sbr, '}');
                 }
 
-                result.add(new Kv(SimpleFiniteState.OTHER, sbr.append(key.charAt(i)).toString()));
+                result.add(new Kv(OTHER, sbr.append(key.charAt(i)).toString()));
             } else if (Character.isWhitespace(c)) {
                 if (c == ' ') {
                     StringBuilder sbr = new StringBuilder(1 << 3).append(c);
@@ -108,12 +113,12 @@ class BeggarsLexicalAnalyzer {
                     }
 
                     i--;
-                    result.add(new Kv(SimpleFiniteState.OTHER, sbr.toString()));
+                    result.add(new Kv(OTHER, sbr.toString()));
                 } else {
-                    result.add(new Kv(SimpleFiniteState.OTHER, String.valueOf(c)));
+                    result.add(new Kv(OTHER, String.valueOf(c)));
                 }
             } else {
-                result.add(new Kv(SimpleFiniteState.OTHER, String.valueOf(c)));
+                result.add(new Kv(OTHER, String.valueOf(c)));
             }
         }
 
@@ -130,7 +135,7 @@ class BeggarsLexicalAnalyzer {
         return isLetter(c) || Character.isDigit(c);
     }
 
-    private static boolean isCanonicalDigit(char c, String key, int i) {
+    private static boolean isFullDigit(char c, String key, int i) {
         return Character.isDigit(c)
                 || (('_' == c || '.' == c)
                 && Character.isDigit(key.charAt(++i)));
@@ -145,7 +150,9 @@ class BeggarsLexicalAnalyzer {
         return count % 2 != 0;
     }
 
-    private static int append(int i, int length, String key, StringBuilder sbr, char sp) {
+    private static int append(
+            int i, int length, String key, StringBuilder sbr, char sp) {
+
         char c;
         while (++i < length && (c = key.charAt(i)) != sp) {
             sbr.append(c);
