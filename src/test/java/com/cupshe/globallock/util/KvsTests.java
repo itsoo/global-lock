@@ -21,9 +21,6 @@ public class KvsTests {
         kvs.add(new Kv(SimpleFiniteState.OTHER, "+"));
         kvs.add(new Kv(SimpleFiniteState.OTHER, " "));
         kvs.add(new Kv(SimpleFiniteState.DIGIT, "1"));
-
-        for (Kv kv : kvs) {
-            System.out.println(kv);
-        }
+        System.out.println(kvs);
     }
 }

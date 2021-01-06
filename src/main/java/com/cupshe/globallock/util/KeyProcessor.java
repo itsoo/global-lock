@@ -41,10 +41,11 @@ public class KeyProcessor {
         return PARSER.parseExpression(parsedKey, PARSER_CONTEXT).getValue(context, String.class);
     }
 
-    private static String getLockKey(String key) {
+    static String getLockKey(String key) {
         StringBuilder result = new StringBuilder();
         int i = 0, j = i;
         while ((i = key.indexOf(EXPRESSION_DELIMITER_PREFIX, i)) != -1) {
+            i += EXPRESSION_DELIMITER_PREFIX.length();
             result.append(key, j, i); // no expression template delimiter
             j = key.indexOf(EXPRESSION_DELIMITER_SUFFIX, i);
             result.append(getExpressionLockKey(key.substring(i, j)));
@@ -59,13 +60,15 @@ public class KeyProcessor {
     }
 
     private static String getSampleNamespace(String namespace) {
-        return "".equals(namespace) || ":".equals(namespace)
-                ? ""
-                : namespace.endsWith(":") ? namespace : namespace + ':';
+        return !"".equals(namespace) && !":".equals(namespace)
+                ? (namespace.endsWith(":") ? namespace : namespace + ':')
+                : "";
     }
 
     private static String getSampleKey(String key) {
-        return key.charAt(0) == ':' ? key.substring(1) : key;
+        return key.startsWith(":") && key.length() > 1
+                ? key.substring(1)
+                : key;
     }
 
     private static String getExpressionLockKey(String key) {

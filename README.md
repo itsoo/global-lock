@@ -35,8 +35,8 @@
 ```yaml
 redisson:
   # 单机模式
-  address: "redis://redis.develop.kapeixi.cn:6379"
-  password: "Y9iwbKwTrdFKavGc"
+  address: "redis://127.0.0.1:6379"
+  password: "REDIS_PASSWORD"
   database: 0
   timeout: 3000
   connection-pool-size: 64

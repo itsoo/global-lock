@@ -18,30 +18,42 @@ class BeggarsLexicalAnalyzer {
         Kvs result = new Kvs();
         for (int i = 0, length = key.length(); i < length; i++) {
             char c = key.charAt(i);
+            if (c == '\\' && !isEscapeBefore(key, i)) {
+                continue;
+            }
+
             if (isLetter(c)) {
-                StringBuilder sbr = new StringBuilder(1 << 2).append(c);
+                StringBuilder sbr = new StringBuilder(1 << 3).append(c);
                 while (++i < length && isLetterOrDigit(c = key.charAt(i))) {
                     sbr.append(c);
                 }
 
                 result.add(new Kv(SimpleFiniteState.VARIABLE, sbr.toString()));
                 i--;
-            } else if (c == '\'' && !isEscapeBefore(key, i)) {
-                StringBuilder sbr = new StringBuilder(1 << 2).append(c);
+            } else if (isEscapeBefore(key, i)) {
+                result.add(new Kv(SimpleFiniteState.VARCHAR, String.valueOf('\\') + c));
+            } else if (c == '\'') {
+                StringBuilder sbr = new StringBuilder(1 << 3).append(c);
                 while (++i < length && ((c = key.charAt(i)) != '\'' || isEscapeBefore(key, i))) {
                     sbr.append(c);
                 }
-
-                result.add(new Kv(SimpleFiniteState.VARCHAR, sbr.append(c).toString()));
-            } else if (c == '"' && !isEscapeBefore(key, i)) {
-                StringBuilder sbr = new StringBuilder(1 << 2).append(c);
-                while (++i < length && ((c = key.charAt(i)) != '"' || isEscapeBefore(key, i))) {
+                if (i < length) {
                     sbr.append(c);
                 }
 
-                result.add(new Kv(SimpleFiniteState.VARCHAR, sbr.append(c).toString()));
+                result.add(new Kv(SimpleFiniteState.VARCHAR, sbr.toString()));
+            } else if (c == '"') {
+                StringBuilder sbr = new StringBuilder(1 << 3).append(c);
+                while (++i < length && ((c = key.charAt(i)) != '"' || isEscapeBefore(key, i))) {
+                    sbr.append(c);
+                }
+                if (i < length) {
+                    sbr.append(c);
+                }
+
+                result.add(new Kv(SimpleFiniteState.VARCHAR, sbr.toString()));
             } else if (Character.isDigit(c)) {
-                StringBuilder sbr = new StringBuilder(1 << 2).append(c);
+                StringBuilder sbr = new StringBuilder(1 << 3).append(c);
                 short dotCount = 0;
                 while (++i < length && isCanonicalDigit(c = key.charAt(i), key, i)) {
                     if (c == '.') {
@@ -57,7 +69,7 @@ class BeggarsLexicalAnalyzer {
                 result.add(new Kv(SimpleFiniteState.DIGIT, sbr.toString()));
                 i--;
             } else if (c == '.') {
-                StringBuilder sbr = new StringBuilder(1 << 2).append(c);
+                StringBuilder sbr = new StringBuilder(1 << 3).append(c);
                 while (++i < length && Character.isWhitespace(c = key.charAt(i))) {
                     sbr.append(c);
                 }
@@ -68,24 +80,38 @@ class BeggarsLexicalAnalyzer {
                 }
 
                 sbr.append(c);
+                if (++i < length && isLetter(c = key.charAt(i))) {
+                    sbr.append(c);
+                    while (++i < length && isLetterOrDigit(c = key.charAt(i))) {
+                        sbr.append(c);
+                    }
+                }
+
+                i--;
+                result.add(new Kv(SimpleFiniteState.OTHER, sbr.toString()));
+            } else if (c == '(' || c == '[' || c == '{') {
+                StringBuilder sbr = new StringBuilder(1 << 3).append(c);
                 if (c == '(') {
                     i = append(i, length, key, sbr, ')');
                 } else if (c == '[') {
                     i = append(i, length, key, sbr, ']');
-                } else if (c == '{') {
-                    i = append(i, length, key, sbr, '}');
                 } else {
-                    if (++i < length && isLetter(c = key.charAt(i))) {
-                        sbr.append(c);
-                        while (++i < length && isLetterOrDigit(c = key.charAt(i))) {
-                            sbr.append(c);
-                        }
-                    }
+                    i = append(i, length, key, sbr, '}');
                 }
 
-                result.add(new Kv(SimpleFiniteState.OTHER, sbr.append(c).toString()));
+                result.add(new Kv(SimpleFiniteState.OTHER, sbr.append(key.charAt(i)).toString()));
             } else if (Character.isWhitespace(c)) {
-                result.add(new Kv(SimpleFiniteState.OTHER, String.valueOf(c)));
+                if (c == ' ') {
+                    StringBuilder sbr = new StringBuilder(1 << 3).append(c);
+                    while (++i < length && (c = key.charAt(i)) == ' ') {
+                        sbr.append(c);
+                    }
+
+                    i--;
+                    result.add(new Kv(SimpleFiniteState.OTHER, sbr.toString()));
+                } else {
+                    result.add(new Kv(SimpleFiniteState.OTHER, String.valueOf(c)));
+                }
             } else {
                 result.add(new Kv(SimpleFiniteState.OTHER, String.valueOf(c)));
             }
@@ -95,7 +121,9 @@ class BeggarsLexicalAnalyzer {
     }
 
     private static boolean isLetter(char c) {
-        return Character.isLetter(c) || c == '_' || c == '$';
+        return Character.isLetter(c)
+                || c == '_'
+                || c == '$';
     }
 
     private static boolean isLetterOrDigit(char c) {
@@ -103,11 +131,18 @@ class BeggarsLexicalAnalyzer {
     }
 
     private static boolean isCanonicalDigit(char c, String key, int i) {
-        return Character.isDigit(c) || (('_' == c || '.' == c) && Character.isDigit(key.charAt(++i)));
+        return Character.isDigit(c)
+                || (('_' == c || '.' == c)
+                && Character.isDigit(key.charAt(++i)));
     }
 
     private static boolean isEscapeBefore(String key, int i) {
-        return i > 0 && key.charAt(i - 1) == '\\';
+        short count = 0;
+        while (i > 0 && key.charAt(--i) == '\\') {
+            count++;
+        }
+
+        return count % 2 != 0;
     }
 
     private static int append(int i, int length, String key, StringBuilder sbr, char sp) {
@@ -126,7 +161,7 @@ class BeggarsLexicalAnalyzer {
 
         VARIABLE, // variable  e.g. foo
         VARCHAR,  // varchar   e.g. 'foo' or "foo"
-        DIGIT,    // numbers   e.g. 1 or 1.0 or 1_000 or 1_000.000000
+        DIGIT,    // numbers   e.g. 1 or 1.0 or 1_000 or 1_000_000.000000
         OTHER;    // others    e.g. empty/clause/delimiter/operator and...
 
         boolean isVariable() {
