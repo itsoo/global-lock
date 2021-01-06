@@ -21,7 +21,7 @@ class Kvs implements Iterable<Kv> {
     private static final Kvs EMPTY = new Kvs();
 
     Kvs() {
-        head = new Kv();
+        head = new Kv(null, null);
         curr = head;
     }
 
@@ -43,10 +43,7 @@ class Kvs implements Iterable<Kv> {
     @Override
     public String toString() {
         StringJoiner joiner = new StringJoiner(", ");
-        for (Kv kv : this) {
-            joiner.add(kv.toString());
-        }
-
+        this.forEach(t -> joiner.add(t.toString()));
         return "Kvs[" + joiner.toString() + ']';
     }
 
@@ -82,10 +79,6 @@ class Kvs implements Iterable<Kv> {
 
         Kv next;
 
-        private Kv() {
-            this(null, null);
-        }
-
         Kv(SimpleFiniteState state, String value) {
             this.state = state;
             this.value = value;
@@ -93,10 +86,10 @@ class Kvs implements Iterable<Kv> {
 
         @Override
         public String toString() {
-            return "Kv(" +
+            return "{" +
                     "state=" + state +
                     ", value=" + value +
-                    ')';
+                    '}';
         }
     }
 }
