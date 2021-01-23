@@ -35,7 +35,7 @@ public class KeyProcessor {
 
     public static String getLockKey(String key, Map<String, Object> params) {
         String parsedKey = getLockKey(key);
-        log.info("Source lock key: [{}] ===> Parsed lock key: [{}]", key, parsedKey);
+        log.info("Source lock-key: [{}] ===> Parsed lock-key: [{}]", key, parsedKey);
         StandardEvaluationContext context = new StandardEvaluationContext();
         context.setVariables(params);
         return PARSER.parseExpression(parsedKey, PARSER_CONTEXT).getValue(context, String.class);
@@ -60,15 +60,13 @@ public class KeyProcessor {
     }
 
     private static String getSampleNamespace(String namespace) {
-        return !"".equals(namespace) && !":".equals(namespace)
+        return (!"".equals(namespace) && !":".equals(namespace))
                 ? (namespace.endsWith(":") ? namespace : namespace + ':')
                 : "";
     }
 
     private static String getSampleKey(String key) {
-        return key.startsWith(":") && key.length() > 1
-                ? key.substring(1)
-                : key;
+        return (key.startsWith(":") && key.length() > 1) ? key.substring(1) : key;
     }
 
     private static String getExpressionLockKey(String key) {
@@ -77,7 +75,7 @@ public class KeyProcessor {
 
     private static String getExpressionVarLockKey(String key) {
         StringBuilder result = new StringBuilder(key.length() + 8);
-        for (Kv kv : BeggarsLexicalAnalyzer.getResult(key)) {
+        for (Kv kv : BeggarsLexicalAnalyzer.parseKvs(key)) {
             if (kv.state.isVariable()) {
                 result.append('#');
             }

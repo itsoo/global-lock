@@ -6,8 +6,13 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * LockedPolicy
+ * <ul>
+ *   <li>try wait policy {@link LockedPolicy#TRY_WAIT}</li>
+ *   <li>blocking policy {@link LockedPolicy#BLOCKING}</li>
+ * </ul>
  *
  * @author zxy
+ * @see GlobalLock
  */
 public enum LockedPolicy {
 

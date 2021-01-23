@@ -1,5 +1,7 @@
 package com.cupshe.globallock.util;
 
+import java.util.Objects;
+
 import static com.cupshe.globallock.util.BeggarsLexicalAnalyzer.SimpleFiniteState.*;
 import static com.cupshe.globallock.util.Kvs.Kv;
 
@@ -11,11 +13,15 @@ import static com.cupshe.globallock.util.Kvs.Kv;
  */
 class BeggarsLexicalAnalyzer {
 
-    static Kvs getResult(String key) {
-        if (key == null) {
+    static Kvs parseKvs(String key) {
+        if (Objects.isNull(key)) {
             return Kvs.emptyKvs();
         }
 
+        return getResult(key);
+    }
+
+    private static Kvs getResult(String key) {
         Kvs result = new Kvs();
         for (int i = 0, length = key.length(); i < length; i++) {
             char c = key.charAt(i);
@@ -35,9 +41,7 @@ class BeggarsLexicalAnalyzer {
                 result.add(new Kv(VARCHAR, String.valueOf('\\') + c));
             } else if (c == '\'') {
                 StringBuilder sbr = new StringBuilder(1 << 3).append(c);
-                while (++i < length && (
-                        (c = key.charAt(i)) != '\'' || isEscapeBefore(key, i))) {
-
+                while (++i < length && ((c = key.charAt(i)) != '\'' || isEscapeBefore(key, i))) {
                     sbr.append(c);
                 }
                 if (i < length) {
@@ -47,9 +51,7 @@ class BeggarsLexicalAnalyzer {
                 result.add(new Kv(VARCHAR, sbr.toString()));
             } else if (c == '"') {
                 StringBuilder sbr = new StringBuilder(1 << 3).append(c);
-                while (++i < length && (
-                        (c = key.charAt(i)) != '"' || isEscapeBefore(key, i))) {
-
+                while (++i < length && ((c = key.charAt(i)) != '"' || isEscapeBefore(key, i))) {
                     sbr.append(c);
                 }
                 if (i < length) {
@@ -126,9 +128,7 @@ class BeggarsLexicalAnalyzer {
     }
 
     private static boolean isLetter(char c) {
-        return Character.isLetter(c)
-                || c == '_'
-                || c == '$';
+        return Character.isLetter(c) || c == '_' || c == '$';
     }
 
     private static boolean isLetterOrDigit(char c) {
@@ -137,8 +137,7 @@ class BeggarsLexicalAnalyzer {
 
     private static boolean isFullDigit(char c, String key, int i) {
         return Character.isDigit(c)
-                || (('_' == c || '.' == c)
-                && Character.isDigit(key.charAt(++i)));
+                || (('_' == c || '.' == c) && Character.isDigit(key.charAt(++i)));
     }
 
     private static boolean isEscapeBefore(String key, int i) {
@@ -150,9 +149,7 @@ class BeggarsLexicalAnalyzer {
         return count % 2 != 0;
     }
 
-    private static int append(
-            int i, int length, String key, StringBuilder sbr, char sp) {
-
+    private static int append(int i, int length, String key, StringBuilder sbr, char sp) {
         char c;
         while (++i < length && (c = key.charAt(i)) != sp) {
             sbr.append(c);
@@ -166,10 +163,17 @@ class BeggarsLexicalAnalyzer {
      */
     enum SimpleFiniteState {
 
-        VARIABLE, // variable  e.g. foo
-        VARCHAR,  // varchar   e.g. 'foo' or "foo"
-        DIGIT,    // numbers   e.g. 1 or 1.0 or 1_000 or 1_000_000.000000
-        OTHER;    // others    e.g. empty/clause/delimiter/operator and...
+        /*** variable: e.g. foo */
+        VARIABLE,
+
+        /*** varchar: e.g. 'foo' or "foo" */
+        VARCHAR,
+
+        /*** numbers: e.g. 1 or 1.0 or 1_000 or 1_000_000.000000 */
+        DIGIT,
+
+        /*** others: e.g. empty/clause/delimiter/operator and... */
+        OTHER;
 
         boolean isVariable() {
             return VARIABLE.equals(this);
