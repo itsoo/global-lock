@@ -16,6 +16,7 @@ import static com.cupshe.globallock.util.Kvs.Kv;
 class Kvs implements Iterable<Kv> {
 
     private final Kv head;
+
     private Kv curr;
 
     private static final Kvs EMPTY = new Kvs();
@@ -75,6 +76,7 @@ class Kvs implements Iterable<Kv> {
     static final class Kv {
 
         final SimpleFiniteState state;
+
         final String value;
 
         Kv next;

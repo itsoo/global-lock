@@ -15,10 +15,15 @@ import java.util.concurrent.TimeUnit;
 public class AnnotationAttribute {
 
     final String key;
+
     final String namespace;
+
     final long leaseTime;
+
     final long waitTime;
+
     final TimeUnit timeUnit;
+
     final LockedPolicy policy;
 
     private AnnotationAttribute(
@@ -44,10 +49,15 @@ public class AnnotationAttribute {
     public static class AnnotationAttributeBuilder {
 
         private String key;
+
         private String namespace;
+
         private long leaseTime;
+
         private long waitTime;
+
         private TimeUnit timeUnit;
+
         private LockedPolicy policy;
 
         private AnnotationAttributeBuilder() {}

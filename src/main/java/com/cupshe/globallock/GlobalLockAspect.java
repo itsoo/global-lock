@@ -38,16 +38,16 @@ public class GlobalLockAspect {
     public Object around(@NonNull ProceedingJoinPoint point) throws Throwable {
         AnnotationAttribute attr = AspectMethodHelper.getAnnotationAttribute(point);
         RLock lock = redissonClient.getLock(getRedisLockKey(point, attr));
-        boolean locked = attr.policy.tryOrLock(lock, attr.waitTime, attr.leaseTime, attr.timeUnit);
+        boolean heldLock = attr.policy.tryOrLock(lock, attr.waitTime, attr.leaseTime, attr.timeUnit);
 
         try {
-            if (locked) {
+            if (heldLock) {
                 return point.proceed(point.getArgs());
             }
 
             throw new TryLockTimeoutException();
         } finally {
-            if (locked && lock.isHeldByCurrentThread()) {
+            if (lock.isHeldByCurrentThread()) {
                 lock.unlock();
             }
         }
