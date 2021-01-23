@@ -47,6 +47,6 @@ public class BeggarsLexicalAnalyzerTests {
     }
 
     private Kvs getKvs(String key) {
-        return BeggarsLexicalAnalyzer.parseKvs(key);
+        return BeggarsLexicalAnalyzer.parseKey(key);
     }
 }
