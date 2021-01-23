@@ -13,7 +13,7 @@ import static com.cupshe.globallock.util.Kvs.Kv;
  */
 class BeggarsLexicalAnalyzer {
 
-    static Kvs parseKvs(String key) {
+    static Kvs parseKey(String key) {
         if (Objects.isNull(key)) {
             return Kvs.emptyKvs();
         }
