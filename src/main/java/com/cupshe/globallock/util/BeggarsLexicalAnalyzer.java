@@ -146,7 +146,7 @@ class BeggarsLexicalAnalyzer {
             count++;
         }
 
-        return count % 2 != 0;
+        return (count & 1) == 1;
     }
 
     private static int append(int i, int length, String key, StringBuilder sbr, char sp) {
