@@ -38,7 +38,7 @@ class BeggarsLexicalAnalyzer {
                 result.add(new Kv(VARIABLE, sbr.toString()));
                 i--;
             } else if (isEscapeBefore(key, i)) {
-                result.add(new Kv(VARCHAR, String.valueOf('\\') + c));
+                result.add(new Kv(OTHER, String.valueOf('\\') + c));
             } else if (c == '\'') {
                 StringBuilder sbr = new StringBuilder(1 << 3).append(c);
                 while (++i < length && ((c = key.charAt(i)) != '\'' || isEscapeBefore(key, i))) {
