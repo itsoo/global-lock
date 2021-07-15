@@ -12,4 +12,9 @@ public class TryLockTimeoutException extends RuntimeException {
     public TryLockTimeoutException() {
         super(MESSAGE);
     }
+
+    @Override
+    public synchronized Throwable fillInStackTrace() {
+        return this;
+    }
 }
