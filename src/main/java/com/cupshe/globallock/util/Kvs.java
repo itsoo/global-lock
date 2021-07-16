@@ -45,7 +45,7 @@ class Kvs implements Iterable<Kv> {
     public String toString() {
         StringJoiner joiner = new StringJoiner(", ");
         this.forEach(t -> joiner.add(t.toString()));
-        return "Kvs[" + joiner.toString() + ']';
+        return "Kvs[" + joiner + ']';
     }
 
     /**
