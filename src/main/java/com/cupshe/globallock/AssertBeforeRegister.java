@@ -32,7 +32,7 @@ public class AssertBeforeRegister implements BeanPostProcessor {
         }
 
         for (Method method : ReflectionUtils.getAllDeclaredMethods(bean.getClass())) {
-            GlobalLock ann = AnnotationUtils.getAnnotation(method, GlobalLock.class);
+            GlobalLock ann = AnnotationUtils.findAnnotation(method, GlobalLock.class);
             if (ann != null) {
                 assertTrue(Modifier.isPublic(method.getModifiers()), method, "access modifier must be public.");
                 assertTrue(ann.leaseTime() >= NON_TIMEOUT, method, "'leaseTime' must ranged [-1, Long.MAX_VALUE].");
