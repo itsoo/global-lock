@@ -34,7 +34,7 @@ public class AspectMethodHelper {
 
     public static AnnotationAttribute getAnnotationAttribute(ProceedingJoinPoint point) {
         Method method = getMethod(point);
-        GlobalLock ann = AnnotationUtils.getAnnotation(method, GlobalLock.class);
+        GlobalLock ann = AnnotationUtils.findAnnotation(method, GlobalLock.class);
         Assert.notNull(ann, method.toGenericString() + ": cannot found annotation @GlobalLock.");
         return AnnotationAttribute.annotationAttributeBuilder()
                 .setKey(ann.key())
