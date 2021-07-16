@@ -1,8 +1,8 @@
 package com.cupshe.globallock.util;
 
-import org.springframework.lang.NonNull;
-
 import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.StringJoiner;
 
 import static com.cupshe.globallock.util.BeggarsLexicalAnalyzer.SimpleFiniteState;
@@ -19,7 +19,34 @@ class Kvs implements Iterable<Kv> {
 
     private Kv curr;
 
-    private static final Kvs EMPTY = new Kvs();
+    /**
+     * Empty kvs
+     */
+    private static final Kvs EMPTY = new Kvs() {
+
+        final Iterator<Kv> EMPTY_ITR = new Itr() {
+
+            @Override
+            public boolean hasNext() {
+                return false;
+            }
+
+            @Override
+            public Kv next() {
+                throw new NoSuchElementException("Nothing in the world");
+            }
+        };
+
+        @Override
+        void add(Kv kv) {
+            throw new IllegalStateException("Utility class");
+        }
+
+        @Override
+        public Iterator<Kv> iterator() {
+            return EMPTY_ITR;
+        }
+    };
 
     Kvs() {
         head = new Kv(null, null);
@@ -36,7 +63,6 @@ class Kvs implements Iterable<Kv> {
     }
 
     @Override
-    @NonNull
     public Iterator<Kv> iterator() {
         return new Itr();
     }
@@ -53,20 +79,20 @@ class Kvs implements Iterable<Kv> {
      */
     final class Itr implements Iterator<Kv> {
 
-        private Kv _curr;
+        private Kv itrCurr;
 
         Itr() {
-            _curr = head;
+            itrCurr = head;
         }
 
         @Override
         public boolean hasNext() {
-            return _curr.next != null;
+            return Objects.nonNull(itrCurr.next);
         }
 
         @Override
         public Kv next() {
-            return _curr = _curr.next;
+            return itrCurr = itrCurr.next;
         }
     }
 
