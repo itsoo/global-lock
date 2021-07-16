@@ -18,6 +18,10 @@ import java.util.Map;
  */
 public class AspectMethodHelper {
 
+    private AspectMethodHelper() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static Map<String, Object> getMappingOfParameters(ProceedingJoinPoint point) {
         return getMappingOfParameters(getMethodParameterNames(point), point.getArgs());
     }
