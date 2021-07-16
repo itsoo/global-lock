@@ -29,6 +29,10 @@ public class KeyProcessor {
 
     public static final String EXPRESSION_DELIMITER_SUFFIX = PARSER_CONTEXT.getExpressionSuffix();
 
+    private KeyProcessor() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static String getLockKey(String namespace, String key, Map<String, Object> params) {
         return getStandardLockKey(namespace, getLockKey(key, params));
     }
